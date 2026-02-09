@@ -5,6 +5,7 @@ import br.dev.paulowolfgang.pacientes.app.port.in.dto.PacienteResult;
 import br.dev.paulowolfgang.pacientes.infra.web.dto.PacienteRequest;
 import br.dev.paulowolfgang.pacientes.infra.web.dto.PacienteUpdateRequest;
 import br.dev.paulowolfgang.pacientes.infra.web.mapper.PacienteWebMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class PacienteController
     }
 
     @PostMapping
-    public ResponseEntity<PacienteResult> create(@RequestBody PacienteRequest request)
+    public ResponseEntity<PacienteResult> create(@Valid @RequestBody PacienteRequest request)
     {
         var result = createUseCase.execute(PacienteWebMapper.toCreateCommand(request));
 
@@ -56,7 +57,7 @@ public class PacienteController
     }
 
     @PutMapping("/{id}")
-    public PacienteResult update(@PathVariable UUID id, @RequestBody PacienteUpdateRequest request)
+    public PacienteResult update(@PathVariable UUID id, @Valid @RequestBody PacienteUpdateRequest request)
     {
         return updateUseCase.execute(id, PacienteWebMapper.toUpdateCommand(request));
     }

@@ -6,14 +6,41 @@ import br.dev.paulowolfgang.pacientes.domain.exception.DomainException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
 
 @RestControllerAdvice
 public class ApiExceptionHandler
 {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiValidationError> handleValidation(MethodArgumentNotValidException ex,
+                                                               HttpServletRequest req)
+    {
+
+        List<ValidationError> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fe -> new ValidationError(fe.getField(), fe.getDefaultMessage()))
+                .sorted(Comparator.comparing(ValidationError::field))
+                .toList();
+
+        ApiValidationError body = new ApiValidationError(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Ocorreu uma falha de validação.",
+                req.getRequestURI(),
+                errors
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
     @ExceptionHandler(PacienteNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(PacienteNotFoundException ex, HttpServletRequest req)
     {
@@ -35,11 +62,10 @@ public class ApiExceptionHandler
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex, HttpServletRequest req)
     {
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Um erro inesperado aconteceu.", req.getRequestURI());
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado.", req.getRequestURI());
     }
 
-    private ResponseEntity<ApiError> build(HttpStatus status, String message, String path)
-    {
+    private ResponseEntity<ApiError> build(HttpStatus status, String message, String path) {
         ApiError body = new ApiError(
                 Instant.now(),
                 status.value(),
@@ -47,6 +73,7 @@ public class ApiExceptionHandler
                 message,
                 path
         );
+
         return ResponseEntity.status(status).body(body);
     }
 }
