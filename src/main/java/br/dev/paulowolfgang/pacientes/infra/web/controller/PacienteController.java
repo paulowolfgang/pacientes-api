@@ -5,6 +5,8 @@ import br.dev.paulowolfgang.pacientes.app.port.in.dto.PacienteResult;
 import br.dev.paulowolfgang.pacientes.infra.web.dto.PacienteRequest;
 import br.dev.paulowolfgang.pacientes.infra.web.dto.PacienteUpdateRequest;
 import br.dev.paulowolfgang.pacientes.infra.web.mapper.PacienteWebMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Pacientes", description = "Endpoints da API de CRUD de pacientes.")
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController
@@ -36,6 +39,7 @@ public class PacienteController
         this.deleteUseCase = deleteUseCase;
     }
 
+    @Operation(summary = "Criar paciente.")
     @PostMapping
     public ResponseEntity<PacienteResult> create(@Valid @RequestBody PacienteRequest request)
     {
@@ -44,24 +48,28 @@ public class PacienteController
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @Operation(summary = "Buscar paciente por ID.")
     @GetMapping("/{id}")
     public PacienteResult getById(@PathVariable UUID id)
     {
         return getUseCase.execute(id);
     }
 
+    @Operation(summary = "Listar pacientes.")
     @GetMapping
     public List<PacienteResult> list()
     {
         return listUseCase.execute();
     }
 
+    @Operation(summary = "Atualizar paciente.")
     @PutMapping("/{id}")
     public PacienteResult update(@PathVariable UUID id, @Valid @RequestBody PacienteUpdateRequest request)
     {
         return updateUseCase.execute(id, PacienteWebMapper.toUpdateCommand(request));
     }
 
+    @Operation(summary = "Remover paciente.")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id)
