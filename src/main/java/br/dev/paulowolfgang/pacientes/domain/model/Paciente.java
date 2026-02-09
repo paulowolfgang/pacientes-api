@@ -1,5 +1,8 @@
 package br.dev.paulowolfgang.pacientes.domain.model;
 
+import br.dev.paulowolfgang.pacientes.domain.model.valueobject.*;
+import br.dev.paulowolfgang.pacientes.domain.exception.DomainException;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
