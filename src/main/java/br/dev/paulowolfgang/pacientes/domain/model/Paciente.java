@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public class Paciente
 {
+    public static final int TAMANHO_MAXIMO_NOME = 150;
+
     private final UUID id;
     private String nome;
     private Cpf cpf;
@@ -78,7 +80,7 @@ public class Paciente
     private void setNome(String nome)
     {
         if (nome == null || nome.isBlank()) throw new DomainException("O campo NOME é obrigatório.");
-        if (nome.length() > 150) throw new DomainException("O campo NOME deve ter no máximo 150 caracteres.");
+        if (nome.length() > TAMANHO_MAXIMO_NOME) throw new DomainException("O campo NOME deve ter no máximo 150 caracteres.");
         this.nome = nome.trim();
     }
 
