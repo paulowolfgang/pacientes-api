@@ -24,7 +24,17 @@ public class PacienteRepositoryAdapter implements PacienteRepositoryPort
     @Override
     public Paciente save(Paciente paciente)
     {
-        var saved = repo.save(PacientePersistenceMapper.toEntity(paciente));
+        var entity = repo
+                .findById(paciente.getId())
+                .orElseGet(() -> {
+                    var e = new br.dev.paulowolfgang.pacientes.infra.db.jpa.PacienteJpaEntity();
+                    e.setId(paciente.getId());
+                    return e;
+                });
+
+        PacientePersistenceMapper.updateEntityFromDomain(entity, paciente);
+
+        var saved = repo.save(entity);
 
         return PacientePersistenceMapper.toDomain(saved);
     }

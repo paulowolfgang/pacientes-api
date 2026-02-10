@@ -62,7 +62,7 @@ public class PacienteJpaEntity
     @Column(name = "ATIVO", nullable = false)
     private boolean ativo;
 
-    @Column(name = "CRIADO_EM", nullable = false)
+    @Column(name = "CRIADO_EM", nullable = false, updatable = false)
     private Instant criadoEm;
 
     @Column(name = "ATUALIZADO_EM")

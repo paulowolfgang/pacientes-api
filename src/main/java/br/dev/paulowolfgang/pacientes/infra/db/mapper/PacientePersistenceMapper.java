@@ -72,4 +72,38 @@ public final class PacientePersistenceMapper
                 e.isAtivo()
         );
     }
+
+    public static void updateEntityFromDomain(PacienteJpaEntity e, Paciente paciente)
+    {
+        e.setNome(paciente.getNome());
+        e.setCpf(paciente.getCpf().value());
+        e.setDataNascimento(paciente.getDataNascimento());
+        e.setEmail(paciente.getEmail() != null ? paciente.getEmail().value() : null);
+        e.setTelefone(paciente.getTelefone() != null ? paciente.getTelefone().value() : null);
+
+        if (paciente.getEndereco() != null)
+        {
+            Endereco end = paciente.getEndereco();
+
+            e.setLogradouro(end.logradouro());
+            e.setNumero(end.numero());
+            e.setComplemento(end.complemento());
+            e.setBairro(end.bairro());
+            e.setCidade(end.cidade());
+            e.setUf(end.uf());
+            e.setCep(end.cep());
+        }
+        else
+        {
+            e.setLogradouro(null);
+            e.setNumero(null);
+            e.setComplemento(null);
+            e.setBairro(null);
+            e.setCidade(null);
+            e.setUf(null);
+            e.setCep(null);
+        }
+
+        e.setAtivo(paciente.isAtivo());
+    }
 }
