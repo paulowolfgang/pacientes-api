@@ -1,0 +1,6 @@
+services:
+  pacientes:
+    build: .
+    container_name: pacientes
+    ports:
+      - "8080:8080"
