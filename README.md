@@ -12,6 +12,7 @@ Você precisará de:
 
 - Java 21 LTS ou superior
 - Maven 3.8+ (opcional, se for rodar localmente)
+- Docker (opcional, se for rodar em container)
 
 ## ▶️ Como executar a aplicação
 
@@ -34,6 +35,14 @@ Você precisará de:
    ./mvnw spring-boot:run
 
 OBS: No Windows, use mvnw.cmd no lugar de ./mvnw.
+
+### 🐳 Opção 2: Rodar com Docker
+
+1. Construa a imagem e execute o container a partir do Docker Compose:
+
+    ```bash
+   docker compose up --build
+
 OBS: A aplicação estará acessível em http://localhost:8080
 
 ### 📚 Observações
@@ -66,6 +75,7 @@ Senha: (deixe em branco)
 - [H2 Database](https://www.h2database.com/html/main.html)
 - [Swagger - springdoc-openapi](https://springdoc.org/)
 - [Maven](https://maven.apache.org/)
+- [Docker](https://www.docker.com/)
 
 ## Respostas do Desafio
 
